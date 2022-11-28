@@ -1,8 +1,10 @@
 // const express = require("express"); --> type : "commonjs" //older syntax
 import express from "express"; // "type": "module"
 import { MongoClient } from "mongodb";
+import * as dotenv from "dotenv";
+dotenv.config();
+console.log(process.env.MONGO_URL);
 const app = express();
-
 const PORT = 4000;
 
 // const movies = [
@@ -97,6 +99,8 @@ const PORT = 4000;
 // ];
 // const MONGO_URL = "mongodb://localhost"; //v5
 // const MONGO_URL = "mongodb://127.0.0.1"; //v6
+
+const MONGO_URL = process.env.MONGO_URL;
 
 async function createConnection() {
   const client = new MongoClient(MONGO_URL);
