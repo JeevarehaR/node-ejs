@@ -150,4 +150,28 @@ app.get("/movies/:id", async function (request, response) {
     : response.status(404).send({ msg: "movie not found" });
 });
 
+app.put("/movies/:id", async function (request, response) {
+  const { id } = request.params;
+  const data = request.body;
+  const movie = await client
+    .db("b38wd")
+    .collection("movies")
+    .updateOne({ id: id }, { $set: data });
+  console.log(movie);
+  movie
+    ? response.send(movie)
+    : response.status(404).send({ msg: "movie not found" });
+});
+
+app.delete("/movies/:id", async function (request, response) {
+  const { id } = request.params;
+  const result = await client
+    .db("b38wd")
+    .collection("movies")
+    .deleteOne({ id: id });
+  console.log(result);
+  result.deletedCount > 0
+    ? response.send({ msg: "movie deleted successfully 🔥🔥" })
+    : response.status(404).send({ msg: "movie not found" });
+});
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
