@@ -1,5 +1,12 @@
 import express from "express";
-import { client } from "../index.js";
+import {
+  getAllMovies,
+  getMovieById,
+  createMovies,
+  deleteMovieById,
+  UpdateMovieByid,
+} from "../services/movies.service.js";
+
 const router = express.Router();
 
 router.get("/", async function (request, response) {
@@ -7,11 +14,7 @@ router.get("/", async function (request, response) {
     request.query.rating = +request.query.rating;
   }
   console.log(request.query);
-  const movies = await client
-    .db("b38wd")
-    .collection("movies")
-    .find(request.query)
-    .toArray();
+  const movies = await getAllMovies(request);
   response.send(movies);
   console.log("movie is loaded successfully");
 });
@@ -19,7 +22,7 @@ router.get("/", async function (request, response) {
 router.post("/", async function (request, response) {
   const data = request.body;
   console.log(data);
-  const result = await client.db("b38wd").collection("movies").insertMany(data);
+  const result = await createMovies(data);
   response.send(result);
 });
 
@@ -27,10 +30,7 @@ router.get("/:id", async function (request, response) {
   const { id } = request.params;
   //   console.log(request.params, id);
   //   const movie = movies.find((mv) => mv.id === id);
-  const movie = await client
-    .db("b38wd")
-    .collection("movies")
-    .findOne({ id: id });
+  const movie = await getMovieById(id);
   movie
     ? response.send(movie)
     : response.status(404).send({ msg: "movie not found" });
@@ -39,10 +39,7 @@ router.get("/:id", async function (request, response) {
 router.put("/:id", async function (request, response) {
   const { id } = request.params;
   const data = request.body;
-  const movie = await client
-    .db("b38wd")
-    .collection("movies")
-    .updateOne({ id: id }, { $set: data });
+  const movie = await UpdateMovieByid(id, data);
   console.log(movie);
   movie
     ? response.send(movie)
@@ -51,10 +48,7 @@ router.put("/:id", async function (request, response) {
 
 router.delete("/:id", async function (request, response) {
   const { id } = request.params;
-  const result = await client
-    .db("b38wd")
-    .collection("movies")
-    .deleteOne({ id: id });
+  const result = await deleteMovieById(id);
   console.log(result);
   result.deletedCount > 0
     ? response.send({ msg: "movie deleted successfully 🔥🔥" })
