@@ -6,6 +6,7 @@ import {
   deleteMovieById,
   UpdateMovieByid,
 } from "../services/movies.service.js";
+import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -19,13 +20,6 @@ router.get("/", async function (request, response) {
   console.log("movie is loaded successfully");
 });
 
-router.post("/", async function (request, response) {
-  const data = request.body;
-  console.log(data);
-  const result = await createMovies(data);
-  response.send(result);
-});
-
 router.get("/:id", async function (request, response) {
   const { id } = request.params;
   //   console.log(request.params, id);
@@ -34,6 +28,13 @@ router.get("/:id", async function (request, response) {
   movie
     ? response.send(movie)
     : response.status(404).send({ msg: "movie not found" });
+});
+
+router.post("/", async function (request, response) {
+  const data = request.body;
+  console.log(data);
+  const result = await createMovies(data);
+  response.send(result);
 });
 
 router.put("/:id", async function (request, response) {
