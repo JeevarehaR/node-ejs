@@ -27,6 +27,24 @@ app.get("/", function (request, response) {
   response.send("Hello 🙋‍♂️, 🌏🎊✨🤩 Welcome to Heroku!");
 });
 
+app.get("/mobiles", async function (request, response) {
+  const mobiles = await client
+    .db("b38wd")
+    .collection("mobiles")
+    .find({})
+    .toArray();
+  response.send(mobiles);
+});
+app.post("/mobiles", async function (request, response) {
+  const data = request.body;
+  console.log(data);
+  const result = await client
+    .db("b38wd")
+    .collection("mobiles")
+    .insertMany(data);
+  response.send(result);
+});
+
 app.use("/movies", moviesRouter);
 app.use("/user", userRouter);
 
