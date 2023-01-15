@@ -24,7 +24,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", function (request, response) {
-  response.send("Hello 🙋‍♂️, 🌏🎊✨🤩 Welcome to Heroku!");
+  response.send("Hello 🙋‍♂️, 🌏🎊✨🤩 Welcome to movies App!");
 });
 
 app.get("/mobiles", async function (request, response) {
